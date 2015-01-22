@@ -1,0 +1,63 @@
+CLMM - the Crypto Library for Mere Mortals
+
+Based on TweetNaCl (http://tweetnacl.cr.yp.to/)
+
+This library is a thin wrapper for tweetnacl intended to make it easier
+for people who are not familiar with the ins and outs of crypto code to
+be able to use it.  CLMM consists of five unix utilities, each of which
+exposes a piece of tweetnacl's functionality in an easy-to-use manner.
+Each utility consits of less than 100 lines of source code.
+
+To build, simply run make.
+
+To use it, you first have to generate some keys.  This is done using
+the genkey utility.  By default, genkey generates keys for the current
+user, but you can also pass it another name as an optional argument to
+generate additional keys for testing.
+
+CLMM stores keys in the ~/.clmm/ directory, which CLMM creates if it
+does not already exist.  There are four keys in each set, one public/secret
+keypair for encryption and another one for signing.  Secret keys are stored
+in binary format to make it a little less tempting for naive users to share
+them.  Public keys are stored in base64 format.
+
+Once you have a set of keys, the following operations are availble:
+
+encrypt file_name recipient_key_id [sender_key_id]
+
+The encrypt utility encrypts a file using authenticated encryption from
+the sender_key_id to the recipient_key_id.  To encrypt a file you must have
+the recipient's public key in your ~/.clmm/ directory.  (To encrypt a file
+for your own use you can, of course, use your own key as the recipeint key.)
+
+decrypt file_name [recipient_key_id]
+
+This utility decrypts a file that has been encrypted by encrypt.
+
+sign file_name [key_id]
+
+This utility produces an ed25519 signature for the given file.  The output
+is a self-contained datum that can be verified independent of the original
+file.
+
+verify [signature_file]
+
+Displays 'valid' or 'NOT valid' as the case may be, and also returns a
+status code of 0 if the signature is valid, -1 if it is not.
+
+NOTE: the format for signatures is a base64 representation of the
+public key, followed by the 64-byte signature in hexadecimal, followed
+by the 64-byte sha512 hash of the document being signed, also in hex.
+The signature is actually not of the original document, but rather of
+the sha512 hash of the documnet (so the documnt is hashed twice, once
+by clmm, and then again by the ed25519 algorithm).  The reason for this
+is that tweetnacl has a very weird signing API that copes the documnet
+being signed.  By hashing the document first, this (gratuitous AFAICT)
+copy operation is constant-time and not horribly expensive.  The original
+document only needs to be traversed once, to compute the original hash.
+The hash is stored in hexadecimal format to make it easy to visually compare
+it to the output of the unix shasum utility.  The signature is stored in
+hex for aesthetic reasons: so it will match the document hatch.  The
+signature comes before the document id to make it easier to parse:
+tweetnacl expects the input to its signature verification routine to be
+in that order.
