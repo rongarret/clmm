@@ -2,9 +2,25 @@ CLMM - the Crypto Library for Mere Mortals
 
 Based on TweetNaCl (http://tweetnacl.cr.yp.to/)
 
-This library is a thin wrapper for tweetnacl intended to make it easier
-for people who are not familiar with the ins and outs of crypto code to
-be able to use it.  CLMM consists of five unix utilities, each of which
+NOTES AND DISCLAIMERS:
+
+1. CLMM is not actually a library, it's a collection of utility.  But
+"Crypto Utilities for Mere Mortals" has a rather unfortunate acronym.
+
+2. CLMM is a prototype.  Its purpose is mainly pedagogical.  It was an
+exercise for me to figure out how to use tweetnacl, and I'm publishing
+it to get feedback and in the hopes that it might be useful as
+reference code.  The tweetnacl crypto core was written by someone who
+knew what they were doing and so it's a sound foundation to build on,
+but CLMM itself has a number of design issues that make it unsuitable
+for serious security applications in its current form.  Maybe some
+day.  In the meantime, comments and constructive criticisms are welcome.
+
+-------------------------------------------------------------------
+
+CLMM is a thin wrapper for tweetnacl intended to make it easier for
+people who are not familiar with the ins and outs of crypto code to be
+able to use it.  CLMM consists of five unix utilities, each of which
 exposes a piece of tweetnacl's functionality in an easy-to-use manner.
 Each utility consits of less than 100 lines of source code.
 
@@ -45,19 +61,23 @@ verify [signature_file]
 Displays 'valid' or 'NOT valid' as the case may be, and also returns a
 status code of 0 if the signature is valid, -1 if it is not.
 
-NOTE: the format for signatures is a base64 representation of the
-public key, followed by the 64-byte signature in hexadecimal, followed
-by the 64-byte sha512 hash of the document being signed, also in hex.
-The signature is actually not of the original document, but rather of
-the sha512 hash of the documnet (so the documnt is hashed twice, once
-by clmm, and then again by the ed25519 algorithm).  The reason for this
+-------------------------------------------------------------------
+
+DESIGN NOTES:
+
+The format for signatures is a base64 representation of the public
+key, followed by the 64-byte signature in hexadecimal, followed by the
+64-byte sha512 hash of the document being signed, also in hex.  The
+signature is actually not of the original document, but rather of the
+sha512 hash of the documnet (so the documnt is hashed twice, once by
+CLMM, and then again by the ed25519 algorithm).  The reason for this
 is that tweetnacl has a very weird signing API that copes the documnet
 being signed.  By hashing the document first, this (gratuitous AFAICT)
-copy operation is constant-time and not horribly expensive.  The original
-document only needs to be traversed once, to compute the original hash.
-The hash is stored in hexadecimal format to make it easy to visually compare
-it to the output of the unix shasum utility.  The signature is stored in
-hex for aesthetic reasons: so it will match the document hatch.  The
-signature comes before the document id to make it easier to parse:
-tweetnacl expects the input to its signature verification routine to be
-in that order.
+copy operation is constant-time and not horribly expensive.  The
+original document only needs to be traversed once, to compute the
+original hash.  The hash is stored in hexadecimal format to make it
+easy to visually compare it to the output of the unix shasum utility.
+The signature is stored in hex for aesthetic reasons: so it will match
+the document hatch.  The signature comes before the document id to
+make it easier to parse: tweetnacl expects the input to its signature
+verification routine to be in that order.
