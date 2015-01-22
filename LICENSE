@@ -1,7 +1,6 @@
-tweetnacl.c and tweetnacl.h were written by Daniel J. Bernstein.  I have
-been unable to locate license information, but the code is on the internet
-with no copyright notice, so distributing it without a license is a risk
-I'm willing to take.
+tweetnacl.c and tweetnacl.h were written by Daniel J. Bernstein and have
+been placed by him in the public domain. (See
+http://tweetnacl.cr.yp.to/tweetnacl-20140917.pdf)
 
 base64.c and base64.h are used under the terms of the licenses in those files.
 
