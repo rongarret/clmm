@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 
   u8 from_pk1[pek_size];
   crypto_scalarmult_base(from_pk1, from_sk);
-  if (crypto_verify_16(from_pk, from_pk1)) die("Incorrect pass phrase");
+  if (crypto_verify_32(from_pk, from_pk1)) die("Incorrect pass phrase");
 
   p_vector msg = file_contents(filename, crypto_box_ZEROBYTES);
   u8 *m = msg->padding;

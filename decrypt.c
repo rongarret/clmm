@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
   
   u8 to_pk1[pek_size];
   crypto_scalarmult_base(to_pk1, to_sk);
-  if (crypto_verify_16(to_pk, to_pk1)) die("Incorrect pass phrase");
+  if (crypto_verify_32(to_pk, to_pk1)) die("Incorrect pass phrase");
 
   // Get the from_key, nonce and ciphertext from the encrypted message
 
