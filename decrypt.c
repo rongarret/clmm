@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   // Get the keys
 
   c_string homedir = pw->pw_dir;
-  c_string clmm_path, from_pk_path, to_sk_path, to_pk_path;
+  c_string clmm_path, to_sk_path, to_pk_path;
   asprintf(&clmm_path, "%s/.clmm", homedir);
   
   asprintf(&to_pk_path, "%s/%s.public_encryption_key", clmm_path, to_id);

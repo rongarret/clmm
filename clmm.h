@@ -1,3 +1,9 @@
+#ifdef __linux
+#define _GNU_SOURCE
+#include <string.h>
+#include <unistd.h>
+#endif
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
